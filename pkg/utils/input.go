@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"slices"
 )
 
 func usage() {
@@ -65,10 +66,7 @@ func ReadInputByte() <-chan []byte {
 				return
 			}
 
-			newLine := make([]byte, len(line))
-			copy(newLine, line)
-
-			out <- newLine
+			out <- slices.Clone(line)
 		}
 	}()
 
