@@ -1,7 +1,7 @@
 #!/bin/sh
 targets=$(ls -1 cmd)
 if [ ! -z ${1} ]; then
-    targets=$(find cmd -name '*'${1:-01}'*' | xargs basename)
+    targets=$(find cmd -name '*'${1:-01}'*' | xargs -n 1 basename)
 fi
 
 for target in $targets; do
