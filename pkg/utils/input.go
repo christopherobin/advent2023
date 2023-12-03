@@ -65,7 +65,10 @@ func ReadInputByte() <-chan []byte {
 				return
 			}
 
-			out <- line
+			newLine := make([]byte, len(line))
+			copy(newLine, line)
+
+			out <- newLine
 		}
 	}()
 
