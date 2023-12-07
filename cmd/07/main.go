@@ -22,7 +22,7 @@ const (
 	HIGH_CARD       = 5
 )
 
-func ValueToString(value int) string {
+func valueToString(value int) string {
 	switch value {
 	case FIVE_OF_A_KIND:
 		return "FIVE_OF_A_KIND"
@@ -96,10 +96,10 @@ func main() {
 		}
 		kind2 := improve(hand, kind1, jokers)
 
-		fmt.Println(cards, ValueToString(kind1), "->", ValueToString(kind2))
+		//fmt.Println(cards, valueToString(kind1), "->", valueToString(kind2))
 
-		value1 := kind1*10000000000 + cardValues1
-		value2 := kind2*10000000000 + cardValues2
+		value1 := kind1*1e10 + cardValues1
+		value2 := kind2*1e10 + cardValues2
 
 		points, _ := strconv.Atoi(pointsStr)
 
