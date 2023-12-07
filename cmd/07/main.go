@@ -71,49 +71,50 @@ func improve(hand map[rune]int, value int) int {
 	return value
 }
 
+// turn a hand into a list of tuples (hand value, bet value)
+func computeHand(cards, values, pointsStr string, shouldImprove bool) [2]int {
+	hand := map[rune]int{}
+	points, _ := strconv.Atoi(pointsStr)
+
+	var cardValues int
+	for _, card := range cards {
+		hand[card]++
+		cardValues = cardValues*100 + strings.Index(values, string(card))
+	}
+
+	kind := 0
+	for _, count := range hand {
+		kind += count * count
+	}
+	if shouldImprove {
+		kind = improve(hand, kind)
+	}
+
+	value := kind*1e10 + cardValues
+	return [2]int{value, points}
+}
+
+// sort the list of hands returned by computeHand and sums it
+func computeScore(hands [][2]int) int {
+	slices.SortFunc(hands, func(a, b [2]int) int { return a[0] - b[0] })
+
+	acc := 0
+	for idx, hand := range hands {
+		acc += (idx + 1) * hand[1]
+	}
+
+	return acc
+}
+
 func main() {
-	hands1 := [][2]int{}
-	hands2 := [][2]int{}
+	handsPart1 := [][2]int{}
+	handsPart2 := [][2]int{}
 	for line := range utils.ReadInput() {
 		cards, pointsStr, _ := strings.Cut(line, " ")
-		hand := map[rune]int{}
-
-		var cardValues1 int
-		var cardValues2 int
-		for _, card := range cards {
-			hand[card]++
-			cardValues1 = cardValues1*100 + strings.Index(faceValues1, string(card))
-			cardValues2 = cardValues2*100 + strings.Index(faceValues2, string(card))
-		}
-
-		kind1 := 0
-		for _, count := range hand {
-			kind1 += count * count
-		}
-		kind2 := improve(hand, kind1)
-
-		value1 := kind1*1e10 + cardValues1
-		value2 := kind2*1e10 + cardValues2
-
-		points, _ := strconv.Atoi(pointsStr)
-
-		hands1 = append(hands1, [2]int{value1, points})
-		hands2 = append(hands2, [2]int{value2, points})
+		handsPart1 = append(handsPart1, computeHand(cards, faceValues1, pointsStr, false))
+		handsPart2 = append(handsPart2, computeHand(cards, faceValues2, pointsStr, true))
 	}
 
-	slices.SortFunc(hands1, func(a, b [2]int) int { return a[0] - b[0] })
-	slices.SortFunc(hands2, func(a, b [2]int) int { return a[0] - b[0] })
-
-	acc1 := 0
-	for idx, hand := range hands1 {
-		acc1 += (idx + 1) * hand[1]
-	}
-
-	acc2 := 0
-	for idx, hand := range hands2 {
-		acc2 += (idx + 1) * hand[1]
-	}
-
-	fmt.Println(acc1)
-	fmt.Println(acc2)
+	fmt.Println(computeScore(handsPart1))
+	fmt.Println(computeScore(handsPart2))
 }
