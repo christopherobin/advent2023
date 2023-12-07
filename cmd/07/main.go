@@ -22,27 +22,6 @@ const (
 	HIGH_CARD       = 5
 )
 
-func valueToString(value int) string {
-	switch value {
-	case FIVE_OF_A_KIND:
-		return "FIVE_OF_A_KIND"
-	case FOUR_OF_A_KIND:
-		return "FOUR_OF_A_KIND"
-	case FULL_HOUSE:
-		return "FULL_HOUSE"
-	case THREE_OF_A_KIND:
-		return "THREE_OF_A_KIND"
-	case TWO_PAIR:
-		return "TWO_PAIR"
-	case ONE_PAIR:
-		return "ONE_PAIR"
-	case HIGH_CARD:
-		return "HIGH_CARD"
-	}
-
-	panic("WUT")
-}
-
 func improve(hand map[rune]int, value int) int {
 	if _, ok := hand['J']; !ok {
 		return value
