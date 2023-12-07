@@ -43,8 +43,8 @@ func valueToString(value int) string {
 	panic("WUT")
 }
 
-func improve(hand map[rune]int, value int, jokers int) int {
-	if jokers == 0 {
+func improve(hand map[rune]int, value int) int {
+	if _, ok := hand['J']; !ok {
 		return value
 	}
 
@@ -80,12 +80,8 @@ func main() {
 
 		var cardValues1 int
 		var cardValues2 int
-		jokers := 0
 		for _, card := range cards {
 			hand[card]++
-			if card == 'J' {
-				jokers++
-			}
 			cardValues1 = cardValues1*100 + strings.Index(faceValues1, string(card))
 			cardValues2 = cardValues2*100 + strings.Index(faceValues2, string(card))
 		}
@@ -94,9 +90,7 @@ func main() {
 		for _, count := range hand {
 			kind1 += count * count
 		}
-		kind2 := improve(hand, kind1, jokers)
-
-		//fmt.Println(cards, valueToString(kind1), "->", valueToString(kind2))
+		kind2 := improve(hand, kind1)
 
 		value1 := kind1*1e10 + cardValues1
 		value2 := kind2*1e10 + cardValues2
