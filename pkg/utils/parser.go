@@ -20,14 +20,20 @@ func ReadNumber(src []byte) (int, int) {
 
 func ParseNumbers(src []byte) []int {
 	numbers := []int{}
+	sign := 1
 	for i := 0; i < len(src); i++ {
 		c := src[i]
 		if !IsDigit(c) {
 			continue
 		}
+		if i > 0 && src[i-1] == '-' {
+			sign = -1
+		} else {
+			sign = 1
+		}
 
 		number, n := ReadNumber(src[i:])
-		numbers = append(numbers, number)
+		numbers = append(numbers, number*sign)
 		i += n
 	}
 	return numbers
